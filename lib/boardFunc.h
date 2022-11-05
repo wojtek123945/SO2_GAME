@@ -53,6 +53,7 @@ extern struct board_t *board;
 extern struct coinBag_t coinBag_15;
 extern struct coordination_t busheshPlaces[BUSH_SIZE];
 extern struct coordination_t campsidePlaces[CAMPSIDE_SIZE];
+extern int boardFreeSpace;
 
 void initializeBoard(struct board_t** gameBoard);
 void initializeBoardFromFile(struct board_t** gameBoard, char* filename);

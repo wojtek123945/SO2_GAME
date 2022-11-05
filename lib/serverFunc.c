@@ -154,6 +154,8 @@ void generateCoin(struct board_t *map, enum boardObstacles obstacles) {
         return;
     // 6 vs 1
     int x, y;
+    if(boardFreeSpace <=0)
+        return;
     do {
         y = (int) (rand() % map->width - 1) + 1;
         x = (int) (rand() % map->height - 1) + 1;

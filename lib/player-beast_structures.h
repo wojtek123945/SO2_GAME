@@ -14,10 +14,11 @@ struct player_t{
     char map[5][5];
 };
 
-struct beast{
+struct beast_t{
     int PID;
     int x;
     int y;
+    int isActive;
     char map[5][5];
 };
 

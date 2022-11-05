@@ -4,6 +4,7 @@ struct board_t *board;
 struct coinBag_t coinBag_15;
 struct coordination_t busheshPlaces[BUSH_SIZE];
 struct coordination_t campsidePlaces[CAMPSIDE_SIZE];
+int boardFreeSpace;
 
 void initializeBoard(struct board_t** gameBoard){
     if(!*gameBoard){
@@ -65,6 +66,7 @@ void initializeBoardFromFile(struct board_t** gameBoard, char* filename){
     newGameBoard->boardPage = calloc(sizeof(unsigned char*), height);
     if(!newGameBoard->boardPage)
         return;
+
     for (int i = 0; i < height; ++i) {
         *(newGameBoard->boardPage + i) = (char*) calloc(sizeof(unsigned char), width);
         if(!*(newGameBoard->boardPage + i)){
@@ -185,10 +187,13 @@ void drawBoard(struct board_t* gameBoard){
         return;
 
     updatePermamentObj(gameBoard);
+    boardFreeSpace=0;
     for (int i = 0; i < gameBoard->height; ++i) {
         for (int j = 0; j < gameBoard->width; ++j) {
             int x=i, y=j;
             drawObject(*(*(gameBoard->boardPage + i) + j), x, y);
+            if(*(*(gameBoard->boardPage + i) + j) == ' ')
+                boardFreeSpace++;
         }
     }
     refresh();

@@ -11,6 +11,7 @@
 #include "boardFunc.h"
 #include <arpa/inet.h>
 #include "playerFunc.h"
+#include "beastFunc.h"
 
 #define PLAYERS_SIZE 4
 #define MILI_SECOND_PER_ROUND 2

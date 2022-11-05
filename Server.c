@@ -4,7 +4,6 @@
 pthread_t playerThread[4];
 
 int main() {
-    ///
     char startServerClick;srand(time(NULL));
     printf("Wanna start server (Y/N)? ");
     scanf("%c%*c", &startServerClick);
@@ -16,8 +15,6 @@ int main() {
     char *ip = "127.0.0.1";
     int port = 5555;
     int SERVER_PID = getpid();
-
-
 
     clear();
     setColors();
@@ -32,6 +29,9 @@ int main() {
         pthread_create(&playerThread[i], NULL, connectToServer, &players[i]);
     }
     // -------------------- SET UP BEAST ---------------------
+    pthread_t beastThread;
+    pthread_create(&beastThread, NULL, startBeast, &beast);
+
 
     // ---------------- CLickServer ------------------
     pthread_t clickServerThread;
@@ -57,6 +57,7 @@ int main() {
             MOVECLICK = 0;
         }
         pthread_mutex_unlock(&mutex);
+
         pthread_mutex_lock(&mutex);
         updatePlayer(players, board);
         initMapToPlayers(players, board);
