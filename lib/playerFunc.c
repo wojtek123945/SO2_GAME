@@ -53,10 +53,10 @@ void drawPlayerInfo(int x, int y, struct player_t player[], int maxSizePlayer) {
             mvprintw(y+8,x+i*9, "      ");
 
             mvprintw(y,x+i*9, "Player%d", player[i].ID);
-            mvprintw(y+1,x+i*9, "-", player[i].PID);
+            mvprintw(y+1,x+i*9, "-");
             mvprintw(y+2,x+i*9, "-");
-            mvprintw(y+3,x+i*9, "--/--", player[i].x, player[i].y);
-            mvprintw(y+4,x+i*9, "-", player[i].deaths);
+            mvprintw(y+3,x+i*9, "--/--");
+            mvprintw(y+4,x+i*9, "-");
         }
     }
     drawLegend(x, y+11);
@@ -66,10 +66,36 @@ void drawPlayerInfo(int x, int y, struct player_t player[], int maxSizePlayer) {
 void initializePlayer(struct player_t *player, struct board_t *map) {
     if (!player)
         return;
-    //x =29, y =11
-    player->x = 29;
-    player->y = 10 + player->ID;
+//    player->x = 29;
+//    player->y = 10 + player->ID;
+
+    int x, y;
+    do {
+        y = (int) (rand() % (map->height - 1) + 1);
+        x = (int) (rand() % (map->width - 1) + 1);
+        if (*(*(map->boardPage + y) + x) == FLOOR)
+            break;
+    } while (1);
+    player->x = x;
+    player->y = y;
+
     player->isConnected = 0;
+}
+void generatePlayerLocation(struct board_t *map, struct player_t* playerClient) {
+    if (!map)
+        return;
+    int x, y;
+    if(boardFreeSpace <= 0)
+        return;
+    do {
+        y = (int) (rand() % (map->height - 1) + 1);
+        x = (int) (rand() % (map->width - 1) + 1);
+        if (*(*(map->boardPage + y) + x) == FLOOR)
+            break;
+    } while (1);
+    playerClient->x = x;
+    playerClient->y = y;
+    refresh();
 }
 
 void closePlayer(struct player_t *player, struct board_t* map){
@@ -102,7 +128,7 @@ void initMapToPlayers(struct player_t player[], const struct board_t *map) {
                 for (int x = 0; x < 5; ++x) {
                     int mapX = (playerX-2) + x;
                     int mapY = (playerY-2) + y;
-                    player[i].map[y][x] = (char) board->boardPage[mapY][mapX];
+                    player[i].map[y][x] = (char) map->boardPage[mapY][mapX];
                 }
             }
         }

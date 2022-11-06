@@ -13,7 +13,7 @@ int main() {
     // ------------------ CREATE SERVER ------------------------
 
     char *ip = "127.0.0.1";
-    int port = 5555;
+    int port = 6665;
     int SERVER_PID = getpid();
 
     clear();
@@ -22,16 +22,19 @@ int main() {
     if(error){
         return 1;
     }
+    // -------------------- SET UP BEAST ---------------------
+    initBeast();
+
+    // -------------------- MAP --------------------------------
+
+    initializeBoardFromFile(&board, "Board_32x24.txt");
+
     // -------------------- SET UP PLAYERS ---------------------
     for (int i = 0; i < PLAYERS_SIZE; ++i) {
         players[i].ID = i;
         initializePlayer(&players[i], board);
         pthread_create(&playerThread[i], NULL, connectToServer, &players[i]);
     }
-    // -------------------- SET UP BEAST ---------------------
-    pthread_t beastThread;
-    pthread_create(&beastThread, NULL, startBeast, &beast);
-
 
     // ---------------- CLickServer ------------------
     pthread_t clickServerThread;
@@ -39,14 +42,10 @@ int main() {
 
     // ----------------- GAME ------------------------
 
-    initializeBoardFromFile(&board, "Board_32x24.txt");
-
     drawBoard(board);
     int whereStartStatsX=34;
     int whereStartStatsY=0;
 
-
-    /// TODO BEAST
     while (1) {
         tour();
         pthread_mutex_lock(&mutex);
@@ -59,8 +58,28 @@ int main() {
         pthread_mutex_unlock(&mutex);
 
         pthread_mutex_lock(&mutex);
+        for (int i = 0; i < BEAST_SIZE; ++i) {
+            if(beast[i].isActive){
+                pthread_mutex_unlock(&beast[i].beastMutex);
+            }
+        }
         updatePlayer(players, board);
+
+        updateBeast(beast);
+        for (int i = 0; i < BEAST_SIZE; ++i) {
+            if(beast[i].isActive){
+                eatPlayer(&beast[i], players);
+            }
+        }
+
+
         initMapToPlayers(players, board);
+        for (int i = 0; i < BEAST_SIZE; ++i) {
+            if(beast[i].isActive){
+                updateBeastMap(&beast[i], board);
+            }
+        }
+
         sendMess(players);
         pthread_mutex_unlock(&mutex);
 
@@ -72,6 +91,7 @@ int main() {
         drawPlayerInfo(whereStartStatsX, whereStartStatsY, players, PLAYERS_SIZE);
         mvprintw(whereStartStatsY+1, whereStartStatsX+1, "Server PID     %d Round %d", SERVER_PID, ROUND);
         mvprintw(whereStartStatsY+2, whereStartStatsX+1, "   Players     %d", CLIENTS);
+        //mvprintw(27, 0, "------------------------- DEBUG --------------------------");
         pthread_mutex_unlock(&mutex);
         refresh();
     }
@@ -79,6 +99,12 @@ int main() {
     for (int i = 0; i < PLAYERS_SIZE; ++i) {
         pthread_cancel(playerThread[i]);
         close(players[i].clientSocket);
+    }
+    for (int i = 0; i < BEAST_SIZE; ++i) {
+        if(beast[i].isActive){
+            pthread_mutex_destroy(&beast[i].beastMutex);
+            pthread_cancel(beastThread[beast[i].ID]);
+        }
     }
     freeBoard(&board);
     pthread_cancel(clickServerThread);

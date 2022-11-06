@@ -6,6 +6,7 @@
 
 void initializePlayer(struct player_t *player, struct board_t *board);
 void initMapToPlayers(struct player_t player[], const struct board_t *map);
+void generatePlayerLocation(struct board_t *map, struct player_t* playerClient);
 
 void updatePlayerCoins(struct player_t* player, int obj);
 void updatePlayer(struct player_t player[], const struct board_t *map);

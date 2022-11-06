@@ -1,9 +1,10 @@
 #include "serverFunc.h"
 
 enum key_t KeyL[4];
-enum playerInBush playerInBush[4];
+enum clientInBush playerInBush[4];
 struct player_t players[PLAYERS_SIZE];
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_t beastThread[4];
 
 int ROUND=0;
 int MOVECLICK;
@@ -142,6 +143,12 @@ int serverClick(int moveClick, struct board_t *map) {
         case 'q':
         case 'Q': {
             return 1;
+        }
+        case 'B':
+        case 'b':{
+            if(actualBeastSize < BEAST_SIZE){
+                pthread_create(&beastThread[actualBeastSize], NULL, startBeast, &beast[actualBeastSize]);
+            }
         }
         default:
             break;
