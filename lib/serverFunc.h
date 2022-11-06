@@ -13,16 +13,8 @@
 #include "playerFunc.h"
 #include "beastFunc.h"
 
-#define PLAYERS_SIZE 4
 #define MILI_SECOND_PER_ROUND 5
 
-//enum key_t {
-//    NONE = 0,
-//    UP = 1,
-//    DOWN = 2,
-//    LEFT = 3,
-//    RIGHT = 4
-//};
 
 extern enum key_t KeyL[4];
 extern enum clientInBush playerInBush[4];

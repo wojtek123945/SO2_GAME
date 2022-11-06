@@ -2,6 +2,9 @@
 #define PLAYER_BEAST_STRUCTURES
 #include "pthread.h"
 
+#define PLAYERS_SIZE 4
+#define BEAST_SIZE 4
+
 enum key_t {
     NONE = 0,
     UP = 1,

@@ -3,7 +3,6 @@
 #include "player-beast_structures.h"
 #include "unistd.h"
 #include "boardFunc.h"
-#define BEAST_SIZE 4
 
 
 extern struct beast_t beast[BEAST_SIZE];
@@ -21,5 +20,9 @@ int validateBeastMove(int x, int y, struct board_t *map);
 int ifBeastInBush(const struct beast_t *beastClient,const struct coordination_t* bushCoord);
 void updateBeast(struct beast_t beasts[]);
 void updateBeastMap(struct beast_t* beastClient,struct board_t* map);
+
+void eatPlayer(struct beast_t* beastClient ,struct player_t players[]);
+void killPlayer(struct player_t* playerClient);
+void generatePlayerLocation(struct board_t *map, struct player_t* playerClient);
 
 #endif

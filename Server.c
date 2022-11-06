@@ -44,8 +44,6 @@ int main() {
     int whereStartStatsX=34;
     int whereStartStatsY=0;
 
-
-    /// TODO BEAST
     while (1) {
         tour();
         pthread_mutex_lock(&mutex);
@@ -66,6 +64,13 @@ int main() {
         updatePlayer(players, board);
 
         updateBeast(beast);
+        for (int i = 0; i < BEAST_SIZE; ++i) {
+            if(beast[i].isActive){
+                eatPlayer(&beast[i], players);
+            }
+        }
+
+
         initMapToPlayers(players, board);
         for (int i = 0; i < BEAST_SIZE; ++i) {
             if(beast[i].isActive){

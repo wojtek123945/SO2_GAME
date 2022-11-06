@@ -95,9 +95,8 @@ void beastMove(struct beast_t* beastClient, int playerX, int playerY){
         }
     }
 
-    //po Lewej stronie besti mapy
+    //Coś sie psuje
     if(playerX > 2){
-        //Lewa góra część mapy
         if(playerY > 2){
             if(beastClient->map[beastActualY+1][beastActualX] != WALL){
                 mvprintw(32, 1, "Beastmove DOWN");
@@ -112,7 +111,6 @@ void beastMove(struct beast_t* beastClient, int playerX, int playerY){
                 return;
             }
         }else{
-            //Lewa dolna czesc mapy
             if(beastClient->map[beastActualY-1][beastActualX] != WALL){
                 mvprintw(32, 1, "Beastmove UP");
                 beastClient->beastMove = UP;
@@ -190,7 +188,6 @@ void generateRandMove(struct beast_t* beastClient) {
 void updateBeast(struct beast_t beasts[]){
     for (int i = 0; i < BEAST_SIZE; ++i) {
         if(beasts[i].isActive){
-            // TODO walidacja ruchów besti
             if(beasts[i].beastMove == UP){
                 if (validateBeastMove(beasts[i].x, beasts[i].y - 1, board) == 0){
                     if(ifBeastInBush(&beasts[i], busheshPlaces) == 1){
@@ -294,4 +291,41 @@ int ifBeastInBush(const struct beast_t *beastClient,const struct coordination_t*
             return 1;
     }
     return 0;
+}
+
+void eatPlayer(struct beast_t* beastClient ,struct player_t players[]){
+    if(!players)
+        return;
+    for (int i = 0; i < PLAYERS_SIZE; ++i) {
+        if(players[i].isConnected){
+            //Check if beast has the same location as beast
+            if(beastClient->x == players[i].x && beastClient->y == players[i].y){
+                killPlayer(&players[i]);
+            }
+        }
+    }
+}
+void killPlayer(struct player_t* playerClient){
+    if(!playerClient)
+        return;
+    playerClient->coins=0;
+    playerClient->deaths++;
+    generatePlayerLocation(board, playerClient);
+    board->boardPage[playerClient->y][playerClient->x] = PLAYER + playerClient->ID;
+}
+void generatePlayerLocation(struct board_t *map, struct player_t* playerClient) {
+    if (!map)
+        return;
+    int x, y;
+    if(boardFreeSpace <= 0)
+        return;
+    do {
+        y = (int) (rand() % (map->height - 1) + 1);
+        x = (int) (rand() % (map->width - 1) + 1);
+        if (*(*(map->boardPage + y) + x) == FLOOR)
+            break;
+    } while (1);
+    playerClient->x = x;
+    playerClient->y = y;
+    refresh();
 }
