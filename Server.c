@@ -29,8 +29,8 @@ int main() {
         pthread_create(&playerThread[i], NULL, connectToServer, &players[i]);
     }
     // -------------------- SET UP BEAST ---------------------
-    pthread_t beastThread;
-    pthread_create(&beastThread, NULL, startBeast, &beast);
+    //pthread_t beastThread[4];
+    initBeast();
 
 
     // ---------------- CLickServer ------------------
@@ -59,8 +59,21 @@ int main() {
         pthread_mutex_unlock(&mutex);
 
         pthread_mutex_lock(&mutex);
+        for (int i = 0; i < BEAST_SIZE; ++i) {
+            if(beast[i].isActive){
+                pthread_mutex_unlock(&beast[i].beastMutex);
+            }
+        }
         updatePlayer(players, board);
+
+        updateBeast(beast);
         initMapToPlayers(players, board);
+        for (int i = 0; i < BEAST_SIZE; ++i) {
+            if(beast[i].isActive){
+                updateBeastMap(&beast[i], board);
+            }
+        }
+
         sendMess(players);
         pthread_mutex_unlock(&mutex);
 
@@ -72,6 +85,13 @@ int main() {
         drawPlayerInfo(whereStartStatsX, whereStartStatsY, players, PLAYERS_SIZE);
         mvprintw(whereStartStatsY+1, whereStartStatsX+1, "Server PID     %d Round %d", SERVER_PID, ROUND);
         mvprintw(whereStartStatsY+2, whereStartStatsX+1, "   Players     %d", CLIENTS);
+        mvprintw(27, 0, "------------------------- DEBUG --------------------------");
+        mvprintw(28, 0, "Actual beasts %d", actualBeastSize);
+        for (int i = 0; i < BEAST_SIZE; ++i) {
+                mvprintw(29, 1 + i * 25, "ID %d Active %d",beast[i].ID, beast[i].isActive);
+                mvprintw(30, 1 + i * 25, "coords %d %d", beast[i].x, beast[i].y);
+                mvprintw(31, 1 + i * 25, "move %d", beast[i].beastMove);
+        }
         pthread_mutex_unlock(&mutex);
         refresh();
     }

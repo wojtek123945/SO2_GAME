@@ -53,10 +53,10 @@ void drawPlayerInfo(int x, int y, struct player_t player[], int maxSizePlayer) {
             mvprintw(y+8,x+i*9, "      ");
 
             mvprintw(y,x+i*9, "Player%d", player[i].ID);
-            mvprintw(y+1,x+i*9, "-", player[i].PID);
+            mvprintw(y+1,x+i*9, "-");
             mvprintw(y+2,x+i*9, "-");
-            mvprintw(y+3,x+i*9, "--/--", player[i].x, player[i].y);
-            mvprintw(y+4,x+i*9, "-", player[i].deaths);
+            mvprintw(y+3,x+i*9, "--/--");
+            mvprintw(y+4,x+i*9, "-");
         }
     }
     drawLegend(x, y+11);
@@ -102,7 +102,7 @@ void initMapToPlayers(struct player_t player[], const struct board_t *map) {
                 for (int x = 0; x < 5; ++x) {
                     int mapX = (playerX-2) + x;
                     int mapY = (playerY-2) + y;
-                    player[i].map[y][x] = (char) board->boardPage[mapY][mapX];
+                    player[i].map[y][x] = (char) map->boardPage[mapY][mapX];
                 }
             }
         }
