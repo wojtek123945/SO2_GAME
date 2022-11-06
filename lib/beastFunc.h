@@ -19,7 +19,6 @@ void beastMove(struct beast_t* beastClient, int playerX, int playerY);
 int checkForPlayer(struct beast_t* beastClient);
 int validateBeastMove(int x, int y, struct board_t *map);
 int ifBeastInBush(const struct beast_t *beastClient,const struct coordination_t* bushCoord);
-void initMapToBeasts(struct beast_t beasts[], const struct board_t *map);
 void updateBeast(struct beast_t beasts[]);
 void updateBeastMap(struct beast_t* beastClient,struct board_t* map);
 

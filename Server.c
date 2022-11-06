@@ -13,7 +13,7 @@ int main() {
     // ------------------ CREATE SERVER ------------------------
 
     char *ip = "127.0.0.1";
-    int port = 5555;
+    int port = 5566;
     int SERVER_PID = getpid();
 
     clear();
@@ -29,7 +29,6 @@ int main() {
         pthread_create(&playerThread[i], NULL, connectToServer, &players[i]);
     }
     // -------------------- SET UP BEAST ---------------------
-    //pthread_t beastThread[4];
     initBeast();
 
 

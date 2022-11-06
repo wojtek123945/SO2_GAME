@@ -14,7 +14,7 @@
 #include "beastFunc.h"
 
 #define PLAYERS_SIZE 4
-#define MILI_SECOND_PER_ROUND 2
+#define MILI_SECOND_PER_ROUND 5
 
 //enum key_t {
 //    NONE = 0,

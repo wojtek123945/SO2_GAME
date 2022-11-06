@@ -41,7 +41,7 @@ void* startBeast(void* arg){
     board->boardPage[beastClient->y][beastClient->x] = BOT_BEAST;
 
     while (1){
-        //checkForPlayer(beastClient);
+        checkForPlayer(beastClient);
         pthread_mutex_lock(&beastClient->beastMutex);
     }
 }
@@ -51,10 +51,8 @@ int checkForPlayer(struct beast_t* beastClient){
     for (int y = 0; y < 5; ++y) {
         for (int x = 0; x < 5; ++x) {
             if(beastClient->map[y][x] >= PLAYER && beastClient->map[y][x] <= PLAYER_4){
-                // Znaczy że jest na prostej lini (poziomej trzeba sprawdzić czy w lewo czy w prawo) od beasti
-                int checkX = beastClient->x-x;
-                int checkY = beastClient->y-y;
-                beastMove(beastClient, checkX, checkY);
+
+                beastMove(beastClient, x, y);
                 return 1;
             }
         }
@@ -64,43 +62,50 @@ int checkForPlayer(struct beast_t* beastClient){
 void beastMove(struct beast_t* beastClient, int playerX, int playerY){
     int beastActualX = beastClient->x;
     int beastActualY = beastClient->y;
-    if(playerX == 0){
+    mvprintw(34, 1, "X %d Y %d", playerX, playerY);
+    if(playerX == 2){
         //góra dół ruch
-        if(playerY > 0){
-            if(beastClient->map[beastActualY][beastActualX-1] != WALL){
-                beastClient->beastMove = UP;
+        if(playerY > 2){
+            if(beastClient->map[beastActualY+1][beastActualX] != WALL){
+                beastClient->beastMove = DOWN;
+                mvprintw(32, 1, "Beastmove DOWN");
                 return;
             }
         }else{
-            if(beastClient->map[beastActualY][beastActualX+1] != WALL){
-                beastClient->beastMove = DOWN;
+            if(beastClient->map[beastActualY-1][beastActualX] != WALL){
+                beastClient->beastMove = UP;
+                mvprintw(32, 1, "Beastmove UP");
                 return;
             }
         }
     }
-    if(playerY == 0){
-        if(playerX > 0){
-            if(beastClient->map[beastActualY-1][beastActualX] != WALL){
-                beastClient->beastMove = LEFT;
+    if(playerY == 2){
+        if(playerX > 2){
+            if(beastClient->map[beastActualY][beastActualX+1] != WALL){
+                beastClient->beastMove = RIGHT;
+                mvprintw(32, 1, "Beastmove RIGHT");
                 return;
             }
         }else{
-            if(beastClient->map[beastActualY][beastActualX] != WALL){
-                beastClient->beastMove = RIGHT;
+            if(beastClient->map[beastActualY][beastActualX-1] != WALL){
+                mvprintw(32, 1, "Beastmove LEFT");
+                beastClient->beastMove = LEFT;
                 return;
             }
         }
     }
 
     //po Lewej stronie besti mapy
-    if(playerX > 0){
+    if(playerX > 2){
         //Lewa góra część mapy
-        if(playerY > 0){
-            if(beastClient->map[beastActualY-1][beastActualX] != WALL){
-                beastClient->beastMove = UP;
+        if(playerY > 2){
+            if(beastClient->map[beastActualY+1][beastActualX] != WALL){
+                mvprintw(32, 1, "Beastmove DOWN");
+                beastClient->beastMove = DOWN;
                 return;
-            }else if(beastClient->map[beastActualY][beastActualX-1] != WALL){
-                beastClient->beastMove = LEFT;
+            }else if(beastClient->map[beastActualY][beastActualX+1] != WALL){
+                mvprintw(32, 1, "Beastmove RIGTH");
+                beastClient->beastMove = RIGHT;
                 return;
             }else{
                 generateRandMove(beastClient);
@@ -108,24 +113,28 @@ void beastMove(struct beast_t* beastClient, int playerX, int playerY){
             }
         }else{
             //Lewa dolna czesc mapy
-            if(beastClient->map[beastActualY+1][beastActualX] != WALL){
-                beastClient->beastMove = DOWN;
+            if(beastClient->map[beastActualY-1][beastActualX] != WALL){
+                mvprintw(32, 1, "Beastmove UP");
+                beastClient->beastMove = UP;
                 return;
-            }else if(beastClient->map[beastActualY][beastActualX-1] != WALL){
-                beastClient->beastMove = LEFT;
+            }else if(beastClient->map[beastActualY][beastActualX+1] != WALL){
+                mvprintw(32, 1, "Beastmove RIGHT");
+                beastClient->beastMove = RIGHT;
                 return;
             }else{
                 generateRandMove(beastClient);
                 return;
             }
         }
-    }else if(playerX < 0){
-        if(playerY > 0){
-            if(beastClient->map[beastActualY-1][beastActualX] != WALL){
-                beastClient->beastMove = UP;
+    }else{
+        if(playerY > 2){
+            if(beastClient->map[beastActualY+1][beastActualX] != WALL){
+                mvprintw(32, 1, "Beastmove DOWN");
+                beastClient->beastMove = DOWN;
                 return;
-            }else if(beastClient->map[beastActualY][beastActualX+1] != WALL){
-                beastClient->beastMove = RIGHT;
+            }else if(beastClient->map[beastActualY][beastActualX-1] != WALL){
+                mvprintw(32, 1, "Beastmove LEFT");
+                beastClient->beastMove = LEFT;
                 return;
             }
             else{
@@ -134,11 +143,13 @@ void beastMove(struct beast_t* beastClient, int playerX, int playerY){
             }
         }else{
             //Lewa dolna czesc mapy
-            if(beastClient->map[beastActualY+1][beastActualX] != WALL){
-                beastClient->beastMove = DOWN;
+            if(beastClient->map[beastActualY-1][beastActualX] != WALL){
+                mvprintw(32, 1, "Beastmove UP");
+                beastClient->beastMove = UP;
                 return;
-            }else if(beastClient->map[beastActualY][beastActualX+1] != WALL){
-                beastClient->beastMove = RIGHT;
+            }else if(beastClient->map[beastActualY][beastActualX-1] != WALL){
+                mvprintw(32, 1, "Beastmove LEFT");
+                beastClient->beastMove = LEFT;
                 return;
             } else{
                 generateRandMove(beastClient);
@@ -179,7 +190,6 @@ void generateRandMove(struct beast_t* beastClient) {
 void updateBeast(struct beast_t beasts[]){
     for (int i = 0; i < BEAST_SIZE; ++i) {
         if(beasts[i].isActive){
-            mvprintw(34, 3, "[*]Update Beast %d Check for move", beasts[i].ID);
             // TODO walidacja ruchów besti
             if(beasts[i].beastMove == UP){
                 if (validateBeastMove(beasts[i].x, beasts[i].y - 1, board) == 0){
@@ -216,7 +226,7 @@ void updateBeast(struct beast_t beasts[]){
                     board->boardPage[beasts[i].y][beasts[i].x] = BOT_BEAST;
                 }
             }else if(beasts[i].beastMove == LEFT){
-                if (validateBeastMove(beasts[i].x -1, beasts[i].y, board) == 0){
+                if (validateBeastMove(beasts[i].x - 1, beasts[i].y, board) == 0){
                     if(ifBeastInBush(&beasts[i], busheshPlaces) == 1){
                         //Player in bush check if he was
                         if(beasts[i].beastInBush == IN_BUSH){
@@ -233,7 +243,7 @@ void updateBeast(struct beast_t beasts[]){
                     board->boardPage[beasts[i].y][beasts[i].x] = BOT_BEAST;
                 }
             }else if(beasts[i].beastMove == RIGHT){
-                if (validateBeastMove(beasts[i].x+1, beasts[i].y, board) == 0){
+                if (validateBeastMove(beasts[i].x + 1, beasts[i].y, board) == 0){
                     if(ifBeastInBush(&beasts[i], busheshPlaces) == 1){
                         //Player in bush check if he was
                         if(beasts[i].beastInBush == IN_BUSH){

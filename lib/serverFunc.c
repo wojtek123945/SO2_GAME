@@ -146,7 +146,7 @@ int serverClick(int moveClick, struct board_t *map) {
         }
         case 'B':
         case 'b':{
-            if(actualBeastSize < 4){
+            if(actualBeastSize < BEAST_SIZE){
                 pthread_create(&beastThread[actualBeastSize], NULL, startBeast, &beast[actualBeastSize]);
             }
         }
