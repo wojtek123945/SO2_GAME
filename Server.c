@@ -13,7 +13,7 @@ int main() {
     // ------------------ CREATE SERVER ------------------------
 
     char *ip = "127.0.0.1";
-    int port = 5566;
+    int port = 6665;
     int SERVER_PID = getpid();
 
     clear();
@@ -22,23 +22,25 @@ int main() {
     if(error){
         return 1;
     }
+    // -------------------- SET UP BEAST ---------------------
+    initBeast();
+
+    // -------------------- MAP --------------------------------
+
+    initializeBoardFromFile(&board, "Board_32x24.txt");
+
     // -------------------- SET UP PLAYERS ---------------------
     for (int i = 0; i < PLAYERS_SIZE; ++i) {
         players[i].ID = i;
         initializePlayer(&players[i], board);
         pthread_create(&playerThread[i], NULL, connectToServer, &players[i]);
     }
-    // -------------------- SET UP BEAST ---------------------
-    initBeast();
-
 
     // ---------------- CLickServer ------------------
     pthread_t clickServerThread;
     pthread_create(&clickServerThread, NULL, setClick, &MOVECLICK);
 
     // ----------------- GAME ------------------------
-
-    initializeBoardFromFile(&board, "Board_32x24.txt");
 
     drawBoard(board);
     int whereStartStatsX=34;
@@ -89,13 +91,7 @@ int main() {
         drawPlayerInfo(whereStartStatsX, whereStartStatsY, players, PLAYERS_SIZE);
         mvprintw(whereStartStatsY+1, whereStartStatsX+1, "Server PID     %d Round %d", SERVER_PID, ROUND);
         mvprintw(whereStartStatsY+2, whereStartStatsX+1, "   Players     %d", CLIENTS);
-        mvprintw(27, 0, "------------------------- DEBUG --------------------------");
-        mvprintw(28, 0, "Actual beasts %d", actualBeastSize);
-        for (int i = 0; i < BEAST_SIZE; ++i) {
-                mvprintw(29, 1 + i * 25, "ID %d Active %d",beast[i].ID, beast[i].isActive);
-                mvprintw(30, 1 + i * 25, "coords %d %d", beast[i].x, beast[i].y);
-                mvprintw(31, 1 + i * 25, "move %d", beast[i].beastMove);
-        }
+        //mvprintw(27, 0, "------------------------- DEBUG --------------------------");
         pthread_mutex_unlock(&mutex);
         refresh();
     }
@@ -103,6 +99,12 @@ int main() {
     for (int i = 0; i < PLAYERS_SIZE; ++i) {
         pthread_cancel(playerThread[i]);
         close(players[i].clientSocket);
+    }
+    for (int i = 0; i < BEAST_SIZE; ++i) {
+        if(beast[i].isActive){
+            pthread_mutex_destroy(&beast[i].beastMutex);
+            pthread_cancel(beastThread[beast[i].ID]);
+        }
     }
     freeBoard(&board);
     pthread_cancel(clickServerThread);

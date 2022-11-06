@@ -8,7 +8,6 @@ void initBeast(){
     for (int i = 0; i < BEAST_SIZE; ++i) {
         beast[i].isActive=0;
         beast[i].ID = i;
-        // TODO sprawdzić mutex przy tworzeniu
         pthread_mutex_init(&beast[i].beastMutex, NULL);
     }
 }
@@ -95,61 +94,107 @@ void beastMove(struct beast_t* beastClient, int playerX, int playerY){
         }
     }
 
-    //Coś sie psuje
     if(playerX > 2){
         if(playerY > 2){
-            if(beastClient->map[beastActualY+1][beastActualX] != WALL){
-                mvprintw(32, 1, "Beastmove DOWN");
-                beastClient->beastMove = DOWN;
-                return;
-            }else if(beastClient->map[beastActualY][beastActualX+1] != WALL){
+            if(beastClient->map[beastActualY][beastActualX+1] != WALL){
                 mvprintw(32, 1, "Beastmove RIGTH");
                 beastClient->beastMove = RIGHT;
                 return;
-            }else{
+            }else if(beastClient->map[beastActualY+1][beastActualX] != WALL){
+                //Cos sie blokuje
+                mvprintw(32, 1, "Beastmove DOWN");
+                beastClient->beastMove = DOWN;
+                return;
+            }
+//            if(beastClient->map[beastActualY+1][beastActualX] != WALL){
+//                //Cos sie blokuje
+//                mvprintw(32, 1, "Beastmove DOWN");
+//                beastClient->beastMove = DOWN;
+//                return;
+//            }else if(beastClient->map[beastActualY][beastActualX+1] != WALL){
+//                mvprintw(32, 1, "Beastmove RIGTH");
+//                beastClient->beastMove = RIGHT;
+//                return;
+//            }
+            else{
+                mvprintw(32, 1, "Beastmove Generated");
                 generateRandMove(beastClient);
                 return;
             }
         }else{
-            if(beastClient->map[beastActualY-1][beastActualX] != WALL){
-                mvprintw(32, 1, "Beastmove UP");
-                beastClient->beastMove = UP;
-                return;
-            }else if(beastClient->map[beastActualY][beastActualX+1] != WALL){
+            if(beastClient->map[beastActualY][beastActualX+1] != WALL){
                 mvprintw(32, 1, "Beastmove RIGHT");
                 beastClient->beastMove = RIGHT;
                 return;
-            }else{
+            }else if(beastClient->map[beastActualY-1][beastActualX] != WALL){
+                //Cos sie blokuje
+                mvprintw(32, 1, "Beastmove UP");
+                beastClient->beastMove = UP;
+                return;
+            }
+//            if(beastClient->map[beastActualY-1][beastActualX] != WALL){
+//                //Cos sie blokuje
+//                mvprintw(32, 1, "Beastmove UP");
+//                beastClient->beastMove = UP;
+//                return;
+//            }else if(beastClient->map[beastActualY][beastActualX+1] != WALL){
+//                mvprintw(32, 1, "Beastmove RIGHT");
+//                beastClient->beastMove = RIGHT;
+//                return;
+//            }
+            else{
+                mvprintw(32, 1, "Beastmove Generated");
                 generateRandMove(beastClient);
                 return;
             }
         }
     }else{
         if(playerY > 2){
-            if(beastClient->map[beastActualY+1][beastActualX] != WALL){
-                mvprintw(32, 1, "Beastmove DOWN");
-                beastClient->beastMove = DOWN;
-                return;
-            }else if(beastClient->map[beastActualY][beastActualX-1] != WALL){
+            if(beastClient->map[beastActualY][beastActualX-1] != WALL){
                 mvprintw(32, 1, "Beastmove LEFT");
                 beastClient->beastMove = LEFT;
                 return;
+            }else if(beastClient->map[beastActualY+1][beastActualX] != WALL){
+                mvprintw(32, 1, "Beastmove DOWN");
+                beastClient->beastMove = DOWN;
+                return;
             }
+//            if(beastClient->map[beastActualY+1][beastActualX] != WALL){
+//                mvprintw(32, 1, "Beastmove DOWN");
+//                beastClient->beastMove = DOWN;
+//                return;
+//            }else if(beastClient->map[beastActualY][beastActualX-1] != WALL){
+//                mvprintw(32, 1, "Beastmove LEFT");
+//                beastClient->beastMove = LEFT;
+//                return;
+//            }
             else{
+                mvprintw(32, 1, "Beastmove Generated");
                 generateRandMove(beastClient);
                 return;
             }
         }else{
-            //Lewa dolna czesc mapy
-            if(beastClient->map[beastActualY-1][beastActualX] != WALL){
-                mvprintw(32, 1, "Beastmove UP");
-                beastClient->beastMove = UP;
-                return;
-            }else if(beastClient->map[beastActualY][beastActualX-1] != WALL){
+            if(beastClient->map[beastActualY][beastActualX-1] != WALL){
                 mvprintw(32, 1, "Beastmove LEFT");
                 beastClient->beastMove = LEFT;
                 return;
-            } else{
+            }else if(beastClient->map[beastActualY-1][beastActualX] != WALL){
+                mvprintw(32, 1, "Beastmove UP");
+                beastClient->beastMove = UP;
+                return;
+            }
+            //Lewa dolna czesc mapy
+//            if(beastClient->map[beastActualY-1][beastActualX] != WALL){
+//                mvprintw(32, 1, "Beastmove UP");
+//                beastClient->beastMove = UP;
+//                return;
+//            }else if(beastClient->map[beastActualY][beastActualX-1] != WALL){
+//                mvprintw(32, 1, "Beastmove LEFT");
+//                beastClient->beastMove = LEFT;
+//                return;
+//            }
+            else{
+                mvprintw(32, 1, "Beastmove Generated");
                 generateRandMove(beastClient);
             }
         }
@@ -310,10 +355,10 @@ void killPlayer(struct player_t* playerClient){
         return;
     playerClient->coins=0;
     playerClient->deaths++;
-    generatePlayerLocation(board, playerClient);
+    genePlayerLocation(board, playerClient);
     board->boardPage[playerClient->y][playerClient->x] = PLAYER + playerClient->ID;
 }
-void generatePlayerLocation(struct board_t *map, struct player_t* playerClient) {
+void genePlayerLocation(struct board_t *map, struct player_t* playerClient) {
     if (!map)
         return;
     int x, y;

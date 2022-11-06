@@ -23,6 +23,6 @@ void updateBeastMap(struct beast_t* beastClient,struct board_t* map);
 
 void eatPlayer(struct beast_t* beastClient ,struct player_t players[]);
 void killPlayer(struct player_t* playerClient);
-void generatePlayerLocation(struct board_t *map, struct player_t* playerClient);
+void genePlayerLocation(struct board_t *map, struct player_t* playerClient);
 
 #endif

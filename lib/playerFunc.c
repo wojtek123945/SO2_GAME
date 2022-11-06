@@ -66,10 +66,36 @@ void drawPlayerInfo(int x, int y, struct player_t player[], int maxSizePlayer) {
 void initializePlayer(struct player_t *player, struct board_t *map) {
     if (!player)
         return;
-    //x =29, y =11
-    player->x = 29;
-    player->y = 10 + player->ID;
+//    player->x = 29;
+//    player->y = 10 + player->ID;
+
+    int x, y;
+    do {
+        y = (int) (rand() % (map->height - 1) + 1);
+        x = (int) (rand() % (map->width - 1) + 1);
+        if (*(*(map->boardPage + y) + x) == FLOOR)
+            break;
+    } while (1);
+    player->x = x;
+    player->y = y;
+
     player->isConnected = 0;
+}
+void generatePlayerLocation(struct board_t *map, struct player_t* playerClient) {
+    if (!map)
+        return;
+    int x, y;
+    if(boardFreeSpace <= 0)
+        return;
+    do {
+        y = (int) (rand() % (map->height - 1) + 1);
+        x = (int) (rand() % (map->width - 1) + 1);
+        if (*(*(map->boardPage + y) + x) == FLOOR)
+            break;
+    } while (1);
+    playerClient->x = x;
+    playerClient->y = y;
+    refresh();
 }
 
 void closePlayer(struct player_t *player, struct board_t* map){
