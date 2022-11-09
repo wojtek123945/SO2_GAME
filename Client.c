@@ -4,7 +4,7 @@ int main() {
 
     // ---------------- SETTINGS -------------
     char *ip = "127.0.0.1";
-    int port = 6665;
+    int port = 6666;
 
     struct sockaddr_in addr;
     sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -51,7 +51,6 @@ int main() {
 
         pthread_mutex_lock(&mutex);
         if(lostConnection == 1){
-            //Have to kill process
             break;
         }
         pthread_mutex_unlock(&mutex);

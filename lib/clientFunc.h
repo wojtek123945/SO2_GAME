@@ -49,7 +49,6 @@ void closePlayer(struct player *player);
 
 void sendMess(const struct player *players);
 
-//void recvMess(struct player *players);
 void* rMess(void* arg);
 
 void drawLegend(int x, int y);

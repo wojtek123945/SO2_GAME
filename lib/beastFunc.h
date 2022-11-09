@@ -11,7 +11,6 @@ extern int actualBeastSize;
 void* startBeast(void* arg);
 void initBeast();
 void generateBeastLocation(struct board_t *map, struct beast_t* beastClient);
-//void updateBeast(struct beast_t beasts[]);
 
 void generateRandMove(struct beast_t* beastClient);
 void beastMove(struct beast_t* beastClient, int playerX, int playerY);

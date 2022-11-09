@@ -32,7 +32,6 @@ void initializeBoard(struct board_t** gameBoard){
     newGameBoard->width = BOARD_WIDTH;
     for (int i = 0; i < BOARD_WIDTH; ++i) {
         for (int j = 0; j < BOARD_HEIGHT; ++j) {
-            ///
             if((i == 0 || j == 0) || (i == BOARD_WIDTH-1 || j == BOARD_HEIGHT-1)) {
                 *(*(newGameBoard->boardPage + i) + j) = '1';
                 continue;
@@ -62,7 +61,6 @@ void initializeBoardFromFile(struct board_t** gameBoard, char* filename){
         return;
     }
 
-    /// ALOKACJA
     newGameBoard->boardPage = calloc(sizeof(unsigned char*), height);
     if(!newGameBoard->boardPage)
         return;
@@ -86,7 +84,6 @@ void initializeBoardFromFile(struct board_t** gameBoard, char* filename){
     while (1){
         char* text = (char*) malloc(sizeof(char)*(width + 1));
         if(!text){
-            printf("ALOCATION ERROR");
             return;
         }
         if(feof(file)){
@@ -119,7 +116,6 @@ void setColors(){
 
     curs_set(false);
     noecho();
-    //Strzałki działają
     keypad(stdscr, TRUE);
 
     start_color();
