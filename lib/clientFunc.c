@@ -19,7 +19,6 @@ void* rMess(void* arg) {
     if (!player)
         return NULL;
     while (1) {
-        int tour;
         int error = (int) recv(sock, player, sizeof(struct player), 0);
         if (error <= 0) {
             pthread_mutex_lock(&mutex);
@@ -37,7 +36,6 @@ void setColors(){
 
     curs_set(false);
     noecho();
-    //Strzałki działają
     keypad(stdscr, TRUE);
 
     start_color();
@@ -109,7 +107,6 @@ void drawBoard(const struct player* player){
             int x=i, y=j;
             drawObject(*(*(player->map + i) + j), x, y);
         }
-        //printw("\n");
     }
     refresh();
 }

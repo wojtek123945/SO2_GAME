@@ -66,8 +66,6 @@ void drawPlayerInfo(int x, int y, struct player_t player[], int maxSizePlayer) {
 void initializePlayer(struct player_t *player, struct board_t *map) {
     if (!player)
         return;
-//    player->x = 29;
-//    player->y = 10 + player->ID;
 
     int x, y;
     do {
@@ -102,7 +100,6 @@ void closePlayer(struct player_t *player, struct board_t* map){
     if (!player)
         return;
     player->isConnected = 0;
-    //close(player->clientSocket);
     map->boardPage[player->y][player->x] = FLOOR;
     player->y = 0;
     player->x = 0;
@@ -143,7 +140,6 @@ void updatePlayer(struct player_t player[], const struct board_t *map) {
             if (KeyL[player[i].ID] == UP) {
                 if (validatePlayerMove(player[i].x, player[i].y - 1, board) == 0){
                     if(ifPlayerInBush(&player[i], busheshPlaces) == 1){
-                        //Player in bush check if he was
                         if(playerInBush[player[i].ID] == IN_BUSH){
                             playerInBush[player[i].ID] = OUT_BUSH;
                             continue;

@@ -159,7 +159,6 @@ int serverClick(int moveClick, struct board_t *map) {
 void generateCoin(struct board_t *map, enum boardObstacles obstacles) {
     if (!map)
         return;
-    // 6 vs 1
     int x, y;
     if(boardFreeSpace <=0)
         return;

@@ -13,7 +13,7 @@ int main() {
     // ------------------ CREATE SERVER ------------------------
 
     char *ip = "127.0.0.1";
-    int port = 6665;
+    int port = 6666;
     int SERVER_PID = getpid();
 
     clear();
@@ -91,11 +91,9 @@ int main() {
         drawPlayerInfo(whereStartStatsX, whereStartStatsY, players, PLAYERS_SIZE);
         mvprintw(whereStartStatsY+1, whereStartStatsX+1, "Server PID     %d Round %d", SERVER_PID, ROUND);
         mvprintw(whereStartStatsY+2, whereStartStatsX+1, "   Players     %d", CLIENTS);
-        //mvprintw(27, 0, "------------------------- DEBUG --------------------------");
         pthread_mutex_unlock(&mutex);
         refresh();
     }
-    /// Closing everthing
     for (int i = 0; i < PLAYERS_SIZE; ++i) {
         pthread_cancel(playerThread[i]);
         close(players[i].clientSocket);

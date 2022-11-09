@@ -3,7 +3,6 @@
 struct beast_t beast[BEAST_SIZE];
 int actualBeastSize = 0;
 
-//Init Beast Server Func
 void initBeast(){
     for (int i = 0; i < BEAST_SIZE; ++i) {
         beast[i].isActive=0;
@@ -28,7 +27,6 @@ void generateBeastLocation(struct board_t *map, struct beast_t* beastClient) {
     refresh();
 }
 
-//Thread Func
 void* startBeast(void* arg){
     struct beast_t* beastClient = (struct beast_t*)arg;
     if(!beastClient)
@@ -94,7 +92,6 @@ void beastMove(struct beast_t* beastClient, int playerX, int playerY){
                 beastClient->beastMove = RIGHT;
                 return;
             }else if(beastClient->map[beastActualY+1][beastActualX] != WALL){
-                //Cos sie blokuje
                 beastClient->beastMove = DOWN;
                 return;
             }
@@ -171,14 +168,12 @@ void generateRandMove(struct beast_t* beastClient) {
         }
     }
 }
-//Server Beast Func
 void updateBeast(struct beast_t beasts[]){
     for (int i = 0; i < BEAST_SIZE; ++i) {
         if(beasts[i].isActive){
             if(beasts[i].beastMove == UP){
                 if (validateBeastMove(beasts[i].x, beasts[i].y - 1, board) == 0){
                     if(ifBeastInBush(&beasts[i], busheshPlaces) == 1){
-                        //Player in bush check if he was
                         if(beasts[i].beastInBush == IN_BUSH){
                             beasts[i].beastInBush = OUT_BUSH;
                             continue;
@@ -195,7 +190,6 @@ void updateBeast(struct beast_t beasts[]){
             }else if(beasts[i].beastMove == DOWN){
                 if (validateBeastMove(beasts[i].x, beasts[i].y + 1, board) == 0){
                     if(ifBeastInBush(&beasts[i], busheshPlaces) == 1){
-                        //Player in bush check if he was
                         if(beasts[i].beastInBush == IN_BUSH){
                             beasts[i].beastInBush = OUT_BUSH;
                             continue;
@@ -212,7 +206,6 @@ void updateBeast(struct beast_t beasts[]){
             }else if(beasts[i].beastMove == LEFT){
                 if (validateBeastMove(beasts[i].x - 1, beasts[i].y, board) == 0){
                     if(ifBeastInBush(&beasts[i], busheshPlaces) == 1){
-                        //Player in bush check if he was
                         if(beasts[i].beastInBush == IN_BUSH){
                             beasts[i].beastInBush = OUT_BUSH;
                             continue;
@@ -229,7 +222,6 @@ void updateBeast(struct beast_t beasts[]){
             }else if(beasts[i].beastMove == RIGHT){
                 if (validateBeastMove(beasts[i].x + 1, beasts[i].y, board) == 0){
                     if(ifBeastInBush(&beasts[i], busheshPlaces) == 1){
-                        //Player in bush check if he was
                         if(beasts[i].beastInBush == IN_BUSH){
                             beasts[i].beastInBush = OUT_BUSH;
                             continue;
@@ -285,7 +277,6 @@ void eatPlayer(struct beast_t* beastClient ,struct player_t players[]){
         return;
     for (int i = 0; i < PLAYERS_SIZE; ++i) {
         if(players[i].isConnected){
-            //Check if beast has the same location as beast
             if(beastClient->x == players[i].x && beastClient->y == players[i].y){
                 killPlayer(&players[i]);
             }
