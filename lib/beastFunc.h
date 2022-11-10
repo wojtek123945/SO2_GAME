@@ -7,6 +7,7 @@
 
 extern struct beast_t beast[BEAST_SIZE];
 extern int actualBeastSize;
+//pthread_mutex_t mutexBeast;
 
 void* startBeast(void* arg);
 void initBeast();

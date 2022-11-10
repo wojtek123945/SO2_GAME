@@ -2,6 +2,7 @@
 
 struct beast_t beast[BEAST_SIZE];
 int actualBeastSize = 0;
+pthread_mutex_t mutexBeast;
 
 void initBeast(){
     for (int i = 0; i < BEAST_SIZE; ++i) {
@@ -34,8 +35,10 @@ void* startBeast(void* arg){
     actualBeastSize++;
     beast[beastClient->ID].PID = getpid();
     beast[beastClient->ID].isActive = 1;
+    pthread_mutex_lock(&mutexBeast);
     generateBeastLocation(board, &beast[beastClient->ID]);
     board->boardPage[beastClient->y][beastClient->x] = BOT_BEAST;
+    pthread_mutex_unlock(&mutexBeast);
 
     while (1){
         checkForPlayer(beastClient);
